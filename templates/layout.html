@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
+    <title>Tailwind CSS</title>
+</head>
+
+
+<body>
+
+    <header class="pl-5 pr-5 flex justify-between w-full h-20 bg-green-700 flex justify-center items-center">
+        <h1 class="text-4xl"><span class="text-white">MyStore</span> <span
+                class="text-yellow-500 text-bold">Admin</span></h1>
+        <i class="fas fa-chevron-circle-down cursor-pointer text-3xl text-white"></i>
+    </header>
+
+    <div class="flex">
+        <aside class="w-3/12 bg-green-700 relative top-0 bottom-0">
+            <ul class="list-none">
+                <li>
+                    <a href="#"
+                        class="inline-block bg-green-800 hover:bg-green-500 cursor-pointer transition-all ease-in-out duration-100 w-full p-3 text-2xl text-white text-center"><i
+                            class="fas fa-shopping-cart text-2xl"></i> Productos</a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="inline-block bg-green-800 hover:bg-green-500 cursor-pointer transition-all ease-in-out duration-100 w-full p-3 text-2xl text-white text-center"><i
+                            class="fas fa-users text-2xl"></i> Clientes</a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="inline-block bg-green-800 hover:bg-green-500 cursor-pointer transition-all ease-in-out duration-100 w-full p-3 text-2xl text-white text-center"><i
+                            class="fas fa-receipt text-2xl"></i> Pedidos</a>
+                </li>
+                <li>
+                    <a href="#"
+                        class="inline-block bg-green-800 hover:bg-green-500 cursor-pointer transition-all ease-in-out duration-100 w-full p-3 text-2xl text-white text-center"><i
+                            class="fas fa-user-circle"></i> Mi Cuenta</a>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="w-full h-full">
+
+        {% block content %}
+        {% endblock content %}
+
+        </main>
+    </div>
+
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/e323a62359.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
