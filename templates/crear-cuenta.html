@@ -11,25 +11,26 @@
     <div class="flex flex-col h-screen">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
-                <div class="m-auto w-3/12">
+                <div class="m-auto w-11/12 md:w-8/12 lg:w-6/12 xl:w-4/12">
                     <ul class='text-center'>
                         {% for categoria, message in messages %}
                             {% if categoria == 'error' %}
-                            <li class="p-3 mb-2 rounded-lg border-4 border-red-500 bg-red-200">{{ message[0] }}</li>
+                            <li class="p-3 mb-2 rounded-lg border-4 border-red-500 text-red-700 bg-red-200">{{ message }}</li>
                             {% endif %}
                             {% if categoria == 'success' %}
-                            <li class="p-3 mb-2 rounded-lg border-4 border-green-500 bg-green-200">{{ message[0] }}</li>
+                            <li class="p-3 mb-2 rounded-lg border-4 border-green-500 text-green-700 bg-green-200">{{ message }}</li>
                             {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
             {% endif %}
         {% endwith %}
-        <div class="h-auto w-4/12 m-auto bg-green-600 border-green-500 shadow-2xl rounded-lg">
+        <div class="h-auto w-11/12 md:w-8/12 lg:w-6/12 xl:w-4/12 m-auto bg-green-600 border-green-500 shadow-2xl rounded-lg">
           <h2 class="text-white text-center text-4xl p-5">MyStore <span class="text-yellow-500 text-bold">Admin</span></h2>
           <h3 class="text-white text-center text-2xl">Crear Cuenta</h3>
           <div class="pt-5 pb-5">
               <form action="/crear-cuenta" method="POST">
+                {{ form.csrf_token }}
                  <div class="m-auto mb-4 w-10/12">
                     <label for="email" class="block text-white text-lg">E-mail</label>
                     <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="email" type="text" placeholder="Tu e-mail">
@@ -41,7 +42,7 @@
                     <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="password_confirm" type="password" placeholder="Repite tu contraseña">
                     
                     <div class="flex mt-5 justify-end">
-                        <button class="text-white appearence-none p-3 m-auto font-bold shadow  bg-yellow-500 rounded-lg">Enviar</button>
+                        <button class="text-white appearence-none p-3 w-full m-auto font-bold shadow  bg-yellow-500 rounded">Enviar</button>
                     </div>
 
                     <div class="flex mt-4 justify-start text-white">

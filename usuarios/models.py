@@ -1,10 +1,8 @@
-from mongoengine import *
-from mongoengine import signals
-from mongoengine.document import Document
-from mongoengine.fields import EmailField, StringField
+from mongoengine import signals, Document, EmailField, StringField
+from flask_login import UserMixin
 import bcrypt
 
-class Usuario(Document):
+class Usuario(Document, UserMixin):
     meta = {'collection': 'usuarios'}
     email = EmailField(required=True, unique=True, blank=False, null=False)
     password = StringField(max_length=80, required=True, blank=False, null=False)
