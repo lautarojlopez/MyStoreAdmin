@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
-from flask_login.utils import login_required, login_user, logout_user
+from flask_login.utils import login_required, login_user, logout_user, current_user
 from .models import Usuario
 from .forms import FormLogin, FormRegistro
 import bcrypt
@@ -8,6 +8,10 @@ usuarios = Blueprint('usuarios', __name__)
 
 @usuarios.route('/crear-cuenta', methods=['GET', 'POST'])
 def crear_cuenta():
+    # Si el usuario ya está autenticado, redirige al inicio
+    if current_user.is_authenticated:
+        return redirect(url_for('general.index'))
+        
     if request.method == 'GET':
         form = FormRegistro()
         return render_template('crear-cuenta.html', form=form)
@@ -29,6 +33,10 @@ def crear_cuenta():
         
 @usuarios.route('/iniciar-sesion', methods=['GET', 'POST'])
 def iniciar_sesion():
+    # Si el usuario ya está autenticado, redirige al inicio
+    if current_user.is_authenticated:
+        return redirect(url_for('general.index'))
+
     if request.method == 'GET':
         form = FormLogin()
         return render_template('iniciar-sesion.html', form=form)
