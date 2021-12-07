@@ -1,22 +1,28 @@
-from flask import Blueprint, redirect, render_template, request, url_for
-from flask_login import login_required
-from wtforms.validators import URL
+from flask import Blueprint, redirect, render_template, request, url_for, flash
+from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename
+from shortuuid import uuid
 from .models import Producto
 
 from general.forms import FormAgregarProducto
 
 general = Blueprint('general', __name__)
 
+# Ver el inicio
 @general.route('/')
 @login_required
 def index():
     return render_template('index.html')
 
-@general.route('/productos')
+# Ver todos los productos
+@general.route('/productos/')
 @login_required
 def productos():
-    return render_template('productos.html')
+    productos = Producto.objects(usuario=current_user).order_by('-updated_at')
+    print(productos)
+    return render_template('productos.html', productos = productos)
 
+# Agregar un nuevo producto
 @general.route('/productos/agregar', methods=['GET', 'POST'])
 @login_required
 def agregar_producto():
@@ -25,11 +31,50 @@ def agregar_producto():
         return render_template('agregar-producto.html', form=form)
     if request.method == "POST":
         form_producto = FormAgregarProducto(request.form, imagen=request.files)
-        if form_producto.validate_on_submit():
+        if form_producto.validate():
             try:
-                
-                producto = Producto(nombre=form_producto['nombre'].data, codigo=form_producto['codigo'].data, precio=float(form_producto['precio'].data), stock=form_producto['stock'].data, imagen=form_producto['imagen'].data)
+                # Guarda la imagen
+                imagen = request.files['imagen']
+                imagen_filename = secure_filename(f'{uuid()}-{imagen.filename}')
+                imagen.save(f'./static/uploads/{imagen_filename}')
+                # Inserta el producto en la base de datos
+                producto = Producto(nombre=form_producto['nombre'].data, codigo=form_producto['codigo'].data, precio=float(form_producto['precio'].data), stock=form_producto['stock'].data, imagen=imagen_filename, usuario=current_user)
                 producto.save()
-            except Exception as e:
-                print(e)
+                # Redirecciona con mensaje de éxito
+                flash('Producto agregado.', 'success')
+                return redirect(url_for('general.productos'))
+            except:
+                # Redirecciona con mensaje de error
+                flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
+                return redirect(url_for('general.agregar_producto'))
+        else:
+            # Muestra los errores de validación del formulario
+            for error in form_producto.errors.values():
+                flash(error[0], 'error')
             return redirect(url_for('general.agregar_producto'))
+
+# Eliminar producto
+@general.route('/productos/eliminar/<string:id>', methods=['GET', 'POST'])
+@login_required
+def eliminar_producto(id):
+
+    try:
+        # TODO CHECKEAR QUE SEA EL USUARIO QUE LO CREO
+        producto = Producto.objects(id=id).first()
+    except:
+        # Redirecciona con mensaje de error
+        flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
+        return redirect(url_for('general.productos'))
+
+    if request.method == "GET":
+        return render_template('eliminar-producto.html', producto=producto)
+    if request.method == "POST":
+        try:
+            producto.delete()
+            # Redirecciona con mensaje de éxito
+            flash('Producto eliminado.', 'success')
+            return redirect(url_for('general.productos'))
+        except:
+            # Redirecciona con mensaje de error
+            flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
+            return redirect(url_for('general.productos'))

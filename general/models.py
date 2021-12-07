@@ -1,5 +1,6 @@
-from mongoengine import Document, StringField, FloatField, IntField, FileField
-from mongoengine.fields import ImageField
+from usuarios.models import Usuario
+from mongoengine import Document, StringField, FloatField, IntField, ReferenceField, DateTimeField
+import datetime
 
 class Producto(Document):
     meta = {'collection': 'productos'}
@@ -8,5 +9,9 @@ class Producto(Document):
     codigo = StringField(max_length=250, null=False)
     precio = FloatField(null=False)
     stock = IntField(null=False)
-    imagen = ImageField()
+    imagen = StringField() # Solo almacena la ruta de la imagen
+    usuario = ReferenceField(Usuario)
+    # Timestamps
+    created_at = DateTimeField(default=datetime.datetime.now)
+    updated_at = DateTimeField(default=datetime.datetime.now)
     

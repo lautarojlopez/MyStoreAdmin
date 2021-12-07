@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="text-center p-5 text-white text-3xl bg-green-500">Productos</h2>
+<div class="p-8 h-full">
+    <div class="w-8/12 shadow-lg border border-green-300 rounded-lg m-auto">
+        <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Eliminar Producto</h3>
+        <p class="text-xl p-3 text-center">¿Estás seguro de que deseas eliminar este producto?</p>
+
+        <div class="block w-6/12 m-auto mb-5 p-4 border-2 shadow-xl transition-all duration-200 ease-in-out rounded-lg border-green-500">
+            <img src="/static/uploads/{{ producto.imagen }}" alt="Imagen Producto" class="p-3 w-52 h-52 block m-auto">
+            <ul class="text-center">
+                <li><span class="text-green-800">Nombre: </span>{{ producto.nombre }}</li>
+                <li><span class="text-green-800">Código: </span>{{ producto.codigo }}</li>
+                <li><span class="text-green-800">Stock: </span>{{ producto.stock }}</li>
+                <li><span class="text-green-800">Precio:</span> ${{ producto.precio }}</li>
+            </ul>
+        </div>
+
+        <div class="flex justify-center mb-3">
+            <a href="" class="p-3 m-3 bg-red-500 rounded text-white">Cancelar</a>
+            <form action="{{ url_for('general.eliminar_producto', id=producto.id) }}" method="POST">
+                <button class="p-3 m-3 bg-green-500 rounded text-white" type="submit">Aceptar</button>
+            </form>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}
