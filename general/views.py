@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from shortuuid import uuid
 from .models import Producto
+import os
 
 from general.forms import FormAgregarProducto
 
@@ -41,7 +42,7 @@ def agregar_producto():
                 else:
                     imagen_filename = 'default.png'
                 # Inserta el producto en la base de datos
-                producto = Producto(nombre=form_producto['nombre'].data, codigo=form_producto['codigo'].data, precio=float(form_producto['precio'].data), stock=form_producto['stock'].data, imagen=imagen_filename, usuario=current_user)
+                producto = Producto(nombre=form_producto['nombre'].data, codigo=form_producto['codigo'].data, precio=float(form_producto['precio'].data), stock=int(form_producto['stock'].data), imagen=imagen_filename, usuario=current_user)
                 producto.save()
                 # Redirecciona con mensaje de éxito
                 flash('Producto agregado.', 'success')
@@ -75,6 +76,8 @@ def eliminar_producto(id):
         return render_template('eliminar-producto.html', producto=producto)
     if request.method == "POST":
         try:
+            if producto.imagen != 'default.png':
+                os.remove(f'static/uploads/{producto.imagen}')
             producto.delete()
             # Redirecciona con mensaje de éxito
             flash('Producto eliminado.', 'success')
@@ -101,15 +104,23 @@ def editar_producto(id):
         form = FormAgregarProducto()
         return render_template('editar-producto.html',form=form, producto=producto)
     if request.method == "POST":
-        producto.nombre = request.form['nombre']
-        producto.codigo = request.form['codigo']
-        producto.precio = float(request.form['precio'])
-        producto.stock = request.form['stock']
-        if request.files['imagen']:
-            imagen = request.files['imagen']
-            imagen_filename = secure_filename(f'{uuid()}-{imagen.filename}')
-            imagen.save(f'./static/uploads/{imagen_filename}')
-            producto.imagen = imagen_filename
-        producto.save()
-        return redirect(url_for('general.productos'))
-        # TODO TERMINAR EDICION: REALIZAR VALIDACIONES
+        form_producto = FormAgregarProducto(request.form, imagen=request.files)
+        if form_producto.validate():
+            producto.nombre = form_producto['nombre'].data
+            producto.codigo = form_producto['codigo'].data
+            producto.precio = float(form_producto['precio'].data)
+            producto.stock = form_producto['stock'].data
+            if request.files['imagen']:
+                if producto.imagen != 'default.png':
+                    os.remove(f'static/uploads/{producto.imagen}')
+                imagen = request.files['imagen']
+                imagen_filename = secure_filename(f'{uuid()}-{imagen.filename}')
+                imagen.save(f'./static/uploads/{imagen_filename}')
+                producto.imagen = imagen_filename
+            producto.save()
+            return redirect(url_for('general.productos'))
+        else:
+            # Muestra los errores de validación del formulario
+            for error in form_producto.errors.values():
+                flash(error[0], 'error')
+            return redirect(url_for('general.editar_producto', id=id))
