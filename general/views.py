@@ -65,7 +65,7 @@ def eliminar_producto(id):
     try:
         producto = Producto.objects(id=id).first()
         if producto.usuario.id != current_user.id:
-            return render_template('404.html')
+            return render_template('401.html')
     except:
         # Redirecciona con mensaje de error
         flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
@@ -117,6 +117,7 @@ def editar_producto(id):
                 imagen.save(f'./static/uploads/{imagen_filename}')
                 producto.imagen = imagen_filename
             producto.save()
+            flash('Producto editado.', 'success')
             return redirect(url_for('general.productos'))
         else:
             # Muestra los errores de validación del formulario

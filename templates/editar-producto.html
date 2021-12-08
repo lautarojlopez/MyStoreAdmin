@@ -19,7 +19,7 @@
             {% endif %}
         {% endwith %}
     <div class="w-8/12 shadow-lg border border-green-300 rounded-lg m-auto">
-        <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Agregar Producto</h3>
+        <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Editar Producto</h3>
 
         <form action="{{ url_for('general.editar_producto', id=producto.id) }}" method="POST" enctype="multipart/form-data">
             {{ form.csrf_token() }}
@@ -39,7 +39,7 @@
                 <label for="email" class="block text-lg mt-3 text-green-700">Imagen</label>
                 <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="imagen" type="file" placeholder="Stock del producto">
 
-                <button type="submit" class="p-3 mt-3 bg-yellow-500 rounded text-white w-full"><i class="fas fa-plus-circle"></i> Agregar Producto</button>
+                <button type="submit" class="p-3 mt-3 bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-100 rounded text-white w-full"><i class="fas fa-save"></i> Guardar Cambios</button>
             </div>
         </form>
 
