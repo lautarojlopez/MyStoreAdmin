@@ -39,9 +39,15 @@
                 {% else %}
                 {% endif %}
                 <li>
-                    <a href="#"
+                    <a href="{{ url_for('clientes.clientes') }}"
                         class="inline-block bg-green-800 hover:bg-green-500 cursor-pointer transition-all ease-in-out duration-100 w-full p-3 text-2xl text-white text-center"><i
                             class="fas fa-users text-2xl"></i> Clientes</a>
+                {% if "/clientes" in request.path %}
+                    <li>
+                        <a href="{{ url_for('clientes.agregar_cliente') }}" class="inline-block bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-100 w-full p-3 text-lg text-white text-center"><i class="fas fa-plus-circle"></i> Agregar Cliente</a>
+                    </li>
+                {% else %}
+                {% endif %}
                 </li>
                 <li>
                     <a href="#"

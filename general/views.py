@@ -47,8 +47,7 @@ def agregar_producto():
                 # Redirecciona con mensaje de éxito
                 flash('Producto agregado.', 'success')
                 return redirect(url_for('general.productos'))
-            except Exception as e:
-                print(e)
+            except:
                 # Redirecciona con mensaje de error
                 flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
                 return redirect(url_for('general.agregar_producto'))

@@ -8,6 +8,7 @@ import os
 # Views
 from usuarios.views import usuarios
 from general.views import general
+from clientes.views import clientes_bp
 
 app = Flask(__name__)
 
@@ -40,7 +41,7 @@ app.config['MAX_CONTENT_LENGTH'] = 5 * 1000 * 1000
 # Routes
 app.register_blueprint(usuarios)
 app.register_blueprint(general)
-
+app.register_blueprint(clientes_bp, url_prefix='/clientes')
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

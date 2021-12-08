@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="text-center p-5 text-white text-3xl bg-green-500">Clientes</h2>
+<div class="p-8 h-full">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="m-auto w-11/12 md:w-8/12 lg:w-6/12 xl:w-4/12">
+                    <ul class='text-center'>
+                        {% for categoria, message in messages %}
+                            {% if categoria == 'error' %}
+                            <li class="p-3 mb-2 rounded-lg border-2 border-red-500 text-red-700 bg-red-200">{{ message }}</li>
+                            {% endif %}
+                            {% if categoria == 'success' %}
+                            <li class="p-3 mb-2 rounded-lg border-2 border-green-500 text-green-700 bg-green-200">{{ message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+    <div class="w-8/12 shadow-lg border border-green-300 rounded-lg m-auto">
+        <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Agregar Cliente</h3>
+
+        <form action="{{ url_for('clientes.agregar_cliente') }}" method="POST" enctype="multipart/form-data">
+            {{ form.csrf_token }}
+            <div class="m-auto mt-5 mb-5 w-10/12">
+                <label for="email" class="block text-lg text-green-700">Nombre</label>
+                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="nombre" type="text" placeholder="Nombre del cliente">
+                
+                <label for="email" class="block text-lg mt-3 text-green-700">E-mail</label>
+                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="email" type="email" placeholder="E-mail del cliente">
+                
+                <label for="email" class="block text-lg mt-3 text-green-700">Dirección</label>
+                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="direccion" type="text" placeholder="Dirección del cliente">
+                
+                <label for="email" class="block text-lg mt-3 text-green-700">Teléfono</label>
+                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="telefono" type="text" placeholder="Teléfono del cliente">
+                
+                <button type="submit" class="p-3 mt-3 bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-100 rounded text-white w-full"><i class="fas fa-plus-circle"></i> Agregar Cliente</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock content %}
