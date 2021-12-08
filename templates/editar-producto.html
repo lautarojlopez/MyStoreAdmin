@@ -21,25 +21,25 @@
     <div class="w-8/12 shadow-lg border border-green-300 rounded-lg m-auto">
         <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Agregar Producto</h3>
 
-        <form action="{{ url_for('general.agregar_producto') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url_for('general.editar_producto', id=producto.id) }}" method="POST" enctype="multipart/form-data">
             {{ form.csrf_token() }}
             <div class="m-auto mt-5 mb-5 w-10/12">
                 <label for="email" class="block text-lg text-green-700">Nombre</label>
-                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="nombre" type="text" placeholder="Nombre del producto">
+                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="nombre" type="text" placeholder="Nombre del producto" value="{{ producto.nombre }}">
                 
                 <label for="email" class="block text-lg mt-3 text-green-700">Código</label>
-                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="codigo" type="text" placeholder="Código del producto">
+                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="codigo" type="text" placeholder="Código del producto" value="{{ producto.codigo }}">
                 
                 <label for="email" class="block text-lg mt-3 text-green-700">Precio ($)</label>
-                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="precio" type="string" placeholder="Precio del producto">
+                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="precio" type="string" placeholder="Precio del producto" value="{{ producto.precio }}">
                 
                 <label for="email" class="block text-lg mt-3 text-green-700">Stock</label>
-                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="stock" type="number" placeholder="Stock del producto">
+                <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="stock" type="number" placeholder="Stock del producto" value="{{ producto.stock }}">
                 
                 <label for="email" class="block text-lg mt-3 text-green-700">Imagen</label>
                 <input class="appearance-none border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring" name="imagen" type="file" placeholder="Stock del producto">
 
-                <button type="submit" class="p-3 mt-3 bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-100 rounded text-white w-full"><i class="fas fa-plus-circle"></i> Agregar Producto</button>
+                <button type="submit" class="p-3 mt-3 bg-yellow-500 rounded text-white w-full"><i class="fas fa-plus-circle"></i> Agregar Producto</button>
             </div>
         </form>
 

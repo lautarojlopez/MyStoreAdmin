@@ -34,16 +34,20 @@ def agregar_producto():
         if form_producto.validate():
             try:
                 # Guarda la imagen
-                imagen = request.files['imagen']
-                imagen_filename = secure_filename(f'{uuid()}-{imagen.filename}')
-                imagen.save(f'./static/uploads/{imagen_filename}')
+                if request.files['imagen']:
+                    imagen = request.files['imagen']
+                    imagen_filename = secure_filename(f'{uuid()}-{imagen.filename}')
+                    imagen.save(f'./static/uploads/{imagen_filename}')
+                else:
+                    imagen_filename = 'default.png'
                 # Inserta el producto en la base de datos
                 producto = Producto(nombre=form_producto['nombre'].data, codigo=form_producto['codigo'].data, precio=float(form_producto['precio'].data), stock=form_producto['stock'].data, imagen=imagen_filename, usuario=current_user)
                 producto.save()
                 # Redirecciona con mensaje de éxito
                 flash('Producto agregado.', 'success')
                 return redirect(url_for('general.productos'))
-            except:
+            except Exception as e:
+                print(e)
                 # Redirecciona con mensaje de error
                 flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
                 return redirect(url_for('general.agregar_producto'))
@@ -59,8 +63,9 @@ def agregar_producto():
 def eliminar_producto(id):
 
     try:
-        # TODO CHECKEAR QUE SEA EL USUARIO QUE LO CREO
         producto = Producto.objects(id=id).first()
+        if producto.usuario.id != current_user.id:
+            return render_template('404.html')
     except:
         # Redirecciona con mensaje de error
         flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
@@ -78,3 +83,33 @@ def eliminar_producto(id):
             # Redirecciona con mensaje de error
             flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
             return redirect(url_for('general.productos'))
+
+# Editar un producto
+@general.route('/productos/editar/<string:id>', methods=['GET', 'POST'])
+@login_required
+def editar_producto(id):
+    try:
+        producto = Producto.objects(id=id).first()
+        if producto.usuario.id != current_user.id:
+            return render_template('404.html')
+    except:
+        # Redirecciona con mensaje de error
+        flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
+        return redirect(url_for('general.productos'))
+    
+    if request.method == "GET":
+        form = FormAgregarProducto()
+        return render_template('editar-producto.html',form=form, producto=producto)
+    if request.method == "POST":
+        producto.nombre = request.form['nombre']
+        producto.codigo = request.form['codigo']
+        producto.precio = float(request.form['precio'])
+        producto.stock = request.form['stock']
+        if request.files['imagen']:
+            imagen = request.files['imagen']
+            imagen_filename = secure_filename(f'{uuid()}-{imagen.filename}')
+            imagen.save(f'./static/uploads/{imagen_filename}')
+            producto.imagen = imagen_filename
+        producto.save()
+        return redirect(url_for('general.productos'))
+        # TODO TERMINAR EDICION: REALIZAR VALIDACIONES

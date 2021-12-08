@@ -17,9 +17,9 @@
         </div>
 
         <div class="flex justify-center mb-3">
-            <a href="" class="p-3 m-3 bg-red-500 rounded text-white">Cancelar</a>
+            <a href="" class="p-3 m-3 bg-red-500 rounded shadow-lg text-white hover:bg-red-600 transition-all ease-in-out duration-200">Cancelar</a>
             <form action="{{ url_for('general.eliminar_producto', id=producto.id) }}" method="POST">
-                <button class="p-3 m-3 bg-green-500 rounded text-white" type="submit">Aceptar</button>
+                <button class="p-3 m-3 bg-green-500 rounded shadow-lg text-white hover:bg-green-600 transition-all ease-in-out duration-200 text-white" type="submit">Aceptar</button>
             </form>
         </div>
 
