@@ -14,4 +14,7 @@ class Producto(Document):
     # Timestamps
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
+
+    def __str__(self):
+        return f'{self.nombre} - {self.codigo}'
     

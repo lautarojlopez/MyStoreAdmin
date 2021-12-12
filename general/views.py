@@ -20,7 +20,6 @@ def index():
 @login_required
 def productos():
     productos = Producto.objects(usuario=current_user).order_by('-updated_at')
-    print(productos)
     return render_template('productos.html', productos = productos)
 
 # Agregar un nuevo producto

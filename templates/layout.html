@@ -20,7 +20,7 @@
     </header>
 
     <div class="flex flex-col md:flex-row">
-        <aside class="md:w-3/12 max-h-full min-h-screen w-full bg-green-700 relative top-0 bottom-0">
+        <aside class="md:w-3/12 md:min-h-screen w-full bg-green-700 relative top-0 bottom-0">
             <ul class="list-none">
                 <li>
                     <a href="{{ url_for('general.index') }}"
@@ -50,10 +50,16 @@
                 {% endif %}
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ url_for('pedidos.ver_pedidos') }}"
                         class="inline-block bg-green-800 hover:bg-green-500 cursor-pointer transition-all ease-in-out duration-100 w-full p-3 text-2xl text-white text-center"><i
                             class="fas fa-receipt text-2xl"></i> Pedidos</a>
                 </li>
+                {% if "/pedidos" in request.path %}
+                    <li>
+                        <a href="{{ url_for('pedidos.agregar_pedido') }}" class="inline-block bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-100 w-full p-3 text-lg text-white text-center"><i class="fas fa-plus-circle"></i> Agregar Pedido</a>
+                    </li>
+                {% else %}
+                {% endif %}
                 <li>
                     <a href="#"
                         class="inline-block bg-green-800 hover:bg-green-500 cursor-pointer transition-all ease-in-out duration-100 w-full p-3 text-2xl text-white text-center"><i
@@ -72,6 +78,7 @@
     
     <!-- Font Awesome -->
     <script src="https://kit.fontawesome.com/e323a62359.js" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='src/main.js') }}"></script>
 </body>
 
 </html>

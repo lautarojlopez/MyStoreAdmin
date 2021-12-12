@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="text-center p-5 text-white text-3xl bg-green-500">Pedidos</h2>
+<div class="p-8 h-full">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="m-auto w-11/12 md:w-8/12 lg:w-6/12 xl:w-4/12">
+                    <ul class='text-center'>
+                        {% for categoria, message in messages %}
+                            {% if categoria == 'error' %}
+                            <li class="p-3 mb-2 rounded-lg border-2 border-red-500 text-red-700 bg-red-200">{{ message }}</li>
+                            {% endif %}
+                            {% if categoria == 'success' %}
+                            <li class="p-3 mb-2 rounded-lg border-2 border-green-500 text-green-700 bg-green-200">{{ message }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        {% endwith %}
+    <div class="w-8/12 shadow-lg border border-green-300 rounded-lg m-auto">
+        <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Agregar Pedido</h3>
+
+        <form action="{{ url_for('pedidos.agregar_pedido') }}" method="POST" enctype="multipart/form-data">
+            <div class="m-auto mt-5 mb-5 w-10/12">
+                <label for="email" class="block text-lg text-green-700">Cliente</label>
+                <select name="cliente" id="cliente" class="bg-white border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring">
+                        {% for cliente in clientes %}
+                            <option value="{{ cliente.id }}">{{ cliente.nombre }} - ({{ cliente.email }})</option>
+                        {% endfor %}  
+                </select>
+                
+                <div class="productos">
+                    <label for="email" class="block text-lg text-green-700 mt-3">Productos</label>
+                    <div class="nuevoProducto">
+                        <div class="flex items-center" id="producto">
+                            <select name="producto" class="bg-white border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring">
+                                {% for producto in productos %}
+                                    <option value="{{ producto.id }}">{{ producto.nombre }} - ({{ producto.codigo }})</option>
+                                {% endfor %}          
+                            </select>
+                            <input name="cantidad" type="number" value="1" min="1" class="w-1/6 ml-3 bg-white border rounded py-2 px-3 text-grey-darker focus:outline-none focus:ring">
+                            <i class="invisible cursor-pointer fas fa-times-circle text-red-500 text-2xl ml-3" id="eliminarProducto"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <i class="fas fa-plus text-white mt-2 cursor-pointer p-2 bg-green-500 rounded" id="agregarProducto"></i>
+                                
+                <button type="submit" class="p-3 mt-3 bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-100 rounded text-white w-full"><i class="fas fa-plus-circle"></i> Agregar Pedido</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock content %}
