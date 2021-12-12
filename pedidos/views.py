@@ -6,6 +6,7 @@ from clientes.models import Cliente
 from general.models import Producto
 from usuarios.models import Usuario
 from pedidos.models import Pedido
+from pedidos.forms import FormAgregarPedido
 
 pedidos_bp = Blueprint('pedidos', __name__)
 
@@ -22,17 +23,35 @@ def agregar_pedido():
     clientes = Cliente.objects(usuario=current_user)
 
     if request.method == 'GET':
-        pedidos = Pedido.objects()
-        return render_template('agregar-pedido.html', productos=productos, clientes=clientes)
+        form = FormAgregarPedido()
+        return render_template('agregar-pedido.html', productos=productos, clientes=clientes, form=form)
     if request.method == 'POST':
-        pedido = Pedido()
-        pedido.cliente = Cliente.objects.get(id=request.form['cliente'])
-        pedido.usuario = current_user
-        for prod in request.form.getlist('producto'):
-            producto = Producto.objects.get(id=prod)
-            pedido.productos.append(producto)
-        for cantidad in request.form.getlist('cantidad'):
-            pedido.cantidades.append(cantidad)
-        pedido.save()
-        flash('Pedido agregado.', 'success')
-        return redirect(url_for('pedidos.ver_pedidos'))
+        try:
+            form_pedido = FormAgregarPedido()
+            if form_pedido.validate():
+                pedido = Pedido()
+                pedido.cliente = Cliente.objects.get(id=request.form['cliente'])
+                pedido.usuario = current_user
+                for prod in request.form.getlist('producto'):
+                    producto = Producto.objects.get(id=prod)
+                    pedido.productos.append(producto)
+                for cantidad in request.form.getlist('cantidad'):
+                    pedido.cantidades.append(cantidad)
+                pedido.save()
+                flash('Pedido agregado.', 'success')
+                return redirect(url_for('pedidos.ver_pedidos'))
+            else:
+                # Muestra los errores de validación del formulario
+                for error in form_pedido.errors.values():
+                    flash(error[0], 'error')
+                return redirect(url_for('pedidos.agregar_pedido'))
+        except:
+            # Redirecciona con mensaje de error
+            flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
+            return redirect(url_for('general.productos'))
+
+# Eliminar un pedido
+@pedidos_bp.route('/eliminar/<string:id>')
+@login_required
+def eliminar_pedido(id):
+    pass

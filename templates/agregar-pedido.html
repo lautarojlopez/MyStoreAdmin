@@ -22,6 +22,7 @@
         <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Agregar Pedido</h3>
 
         <form action="{{ url_for('pedidos.agregar_pedido') }}" method="POST" enctype="multipart/form-data">
+            {{ form.csrf_token }}
             <div class="m-auto mt-5 mb-5 w-10/12">
                 <label for="email" class="block text-lg text-green-700">Cliente</label>
                 <select name="cliente" id="cliente" class="bg-white border rounded w-full py-2 px-3 text-grey-darker focus:outline-none focus:ring">

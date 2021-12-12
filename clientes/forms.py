@@ -7,5 +7,3 @@ class FormAgregarCliente(FlaskForm):
     email = EmailField(validators=[InputRequired('Escribe el e-mail del cliente.'), Length(max=50, message='El e-mail es demasiado largo.')])
     direccion = StringField(validators=[InputRequired('Escribe la dirección del cliente.'), Length(max=50, message='La dirección es demasiado larga.')])
     telefono = StringField(validators=[InputRequired('Escribe el teléfono del cliente.'), Length(max=50, message='El teléfono es demasiado largo.')])
-
-
