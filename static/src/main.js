@@ -75,29 +75,6 @@ document.addEventListener('DOMContentLoaded', function(){
             fecha.innerHTML = fechas_formateadas[index]
         });
 
-        //Marcar pedido como entregado
-        document.addEventListener('click', function(e) {
-            if(e.target.id == "estadoPedido"){
-                if(e.target.classList.contains('no-entregado')){
-                    e.target.classList.remove('bg-green-500')
-                    e.target.classList.remove('hover:bg-green-600')
-                    e.target.classList.add('bg-red-500')
-                    e.target.classList.add('hover:bg-red-600')
-                    e.target.classList.add('entregado')
-                    e.target.classList.remove('no-entregado')
-                    e.target.childNodes[1].textContent = " Marcar como entregado"
-                }
-                else{
-                    e.target.classList.add('bg-green-500')
-                    e.target.classList.add('hover:bg-green-600')
-                    e.target.classList.remove('bg-red-500')
-                    e.target.classList.remove('hover:bg-red-600')
-                    e.target.classList.remove('entregado')
-                    e.target.classList.add('no-entregado')
-                    e.target.childNodes[1].textContent = " Marcar como no entregado"
-                }
-            }
-        })
     }
 
 })

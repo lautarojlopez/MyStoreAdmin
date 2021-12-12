@@ -51,7 +51,25 @@ def agregar_pedido():
             return redirect(url_for('general.productos'))
 
 # Eliminar un pedido
-@pedidos_bp.route('/eliminar/<string:id>')
+@pedidos_bp.route('/eliminar/<string:id>', methods=['GET', 'POST'])
 @login_required
 def eliminar_pedido(id):
-    pass
+    
+    pedido = Pedido.objects.get(id=id)
+
+    # Si no es el creador del pedido, redirecciona a 401
+    if pedido.usuario.id != current_user.id:
+        return render_template('401.html')
+    
+    if request.method == "GET":
+        return render_template('eliminar-pedido.html', pedido=pedido)
+    if request.method == "POST":
+        try:
+            pedido.delete()
+            # Redirecciona con mensaje de éxito
+            flash('Pedido eliminado.', 'success')
+            return redirect(url_for('pedidos.ver_pedidos'))
+        except:
+            # Redirecciona con mensaje de error
+            flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
+            return redirect(url_for('clientes.clientes'))
