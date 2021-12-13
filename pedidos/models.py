@@ -14,6 +14,6 @@ class Pedido(Document):
     productos = ListField(ReferenceField(Producto))
     cantidades = ListField(IntField())
     usuario = ReferenceField(Usuario)
-    estado = BooleanField(default=False)
+    entregado = BooleanField(default=False)
     # Timestamps
     created_at = DateField(default=datetime.datetime.now().date())

@@ -4,6 +4,7 @@ from flask_login.utils import login_required, current_user
 from werkzeug.utils import redirect
 from clientes.models import Cliente
 from general.models import Producto
+from general.views import productos
 from usuarios.models import Usuario
 from pedidos.models import Pedido
 from pedidos.forms import FormAgregarPedido
@@ -32,11 +33,26 @@ def agregar_pedido():
                 pedido = Pedido()
                 pedido.cliente = Cliente.objects.get(id=request.form['cliente'])
                 pedido.usuario = current_user
-                for prod in request.form.getlist('producto'):
-                    producto = Producto.objects.get(id=prod)
+
+                for index, val in enumerate(request.form.getlist('producto')):
+                    # Busca el producto en la base de datos
+                    producto = Producto.objects.get(id=request.form.getlist('producto')[index])
+                    # Guarda la cantidad de productos que se piden
+                    cantidad = int(request.form.getlist('cantidad')[index])
+                    if producto.stock < cantidad:
+                        flash(f'No hay suficiente stock para {producto.nombre} - ({producto.codigo}). Sotck disponible: {producto.stock}', 'error')
+                        return redirect(url_for('pedidos.agregar_pedido'))
+
+                for index, val in enumerate(request.form.getlist('producto')):
+                    # Busca el producto en la base de datos
+                    producto = Producto.objects.get(id=request.form.getlist('producto')[index])
+                    # Guarda la cantidad de productos que se piden
+                    cantidad = int(request.form.getlist('cantidad')[index])
+                    # Elimina esa cantidad del stock del producto pedido
+                    producto.eliminar_stock(cantidad)
                     pedido.productos.append(producto)
-                for cantidad in request.form.getlist('cantidad'):
                     pedido.cantidades.append(cantidad)
+                    producto.save()
                 pedido.save()
                 flash('Pedido agregado.', 'success')
                 return redirect(url_for('pedidos.ver_pedidos'))
@@ -45,7 +61,8 @@ def agregar_pedido():
                 for error in form_pedido.errors.values():
                     flash(error[0], 'error')
                 return redirect(url_for('pedidos.agregar_pedido'))
-        except:
+        except Exception as e:
+            print(e)
             # Redirecciona con mensaje de error
             flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
             return redirect(url_for('general.productos'))
@@ -65,11 +82,18 @@ def eliminar_pedido(id):
         return render_template('eliminar-pedido.html', pedido=pedido)
     if request.method == "POST":
         try:
+            # Si el pedido no fue entregado, devuelve los productos al stock
+            if pedido.entregado == False:
+                for index, val in enumerate(pedido.productos):
+                    producto = Producto.objects.get(id=val.id)
+                    producto.reponer_stock(int(pedido.cantidades[index]))
+                    producto.save()
             pedido.delete()
             # Redirecciona con mensaje de éxito
             flash('Pedido eliminado.', 'success')
             return redirect(url_for('pedidos.ver_pedidos'))
-        except:
+        except Exception as e:
+            print(e)
             # Redirecciona con mensaje de error
             flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
-            return redirect(url_for('clientes.clientes'))
+            return redirect(url_for('pedidos.ver_pedidos'))

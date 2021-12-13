@@ -18,3 +18,8 @@ class Producto(Document):
     def __str__(self):
         return f'{self.nombre} - {self.codigo}'
     
+    def eliminar_stock(self, cantidad):
+        self.stock = self.stock - cantidad
+    def reponer_stock(self, cantidad):
+        self.stock = self.stock + cantidad
+    
