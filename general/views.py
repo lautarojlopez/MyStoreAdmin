@@ -64,7 +64,7 @@ def eliminar_producto(id):
     try:
         producto = Producto.objects(id=id).first()
         if producto.usuario.id != current_user.id:
-            return render_template('401.html')
+            return redirect(url_for('general.error_401'))
     except:
         # Redirecciona con mensaje de error
         flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
@@ -92,7 +92,7 @@ def editar_producto(id):
     try:
         producto = Producto.objects(id=id).first()
         if producto.usuario.id != current_user.id:
-            return render_template('404.html')
+            return redirect(url_for('general.error_401'))
     except:
         # Redirecciona con mensaje de error
         flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
@@ -123,3 +123,8 @@ def editar_producto(id):
             for error in form_producto.errors.values():
                 flash(error[0], 'error')
             return redirect(url_for('general.editar_producto', id=id))
+
+@general.route('/401', methods=['GET', 'POST'])
+@login_required
+def error_401():
+    return render_template('401.html')

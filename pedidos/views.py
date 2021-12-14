@@ -76,7 +76,7 @@ def eliminar_pedido(id):
 
     # Si no es el creador del pedido, redirecciona a 401
     if pedido.usuario.id != current_user.id:
-        return render_template('401.html')
+        return redirect(url_for('general.error_401'))
     
     if request.method == "GET":
         return render_template('eliminar-pedido.html', pedido=pedido)
@@ -85,9 +85,10 @@ def eliminar_pedido(id):
             # Si el pedido no fue entregado, devuelve los productos al stock
             if pedido.entregado == False:
                 for index, val in enumerate(pedido.productos):
-                    producto = Producto.objects.get(id=val.id)
-                    producto.reponer_stock(int(pedido.cantidades[index]))
-                    producto.save()
+                    producto = Producto.objects(id=val.id).first()
+                    if producto:
+                        producto.reponer_stock(int(pedido.cantidades[index]))
+                        producto.save()
             pedido.delete()
             # Redirecciona con mensaje de éxito
             flash('Pedido eliminado.', 'success')
@@ -97,3 +98,20 @@ def eliminar_pedido(id):
             # Redirecciona con mensaje de error
             flash('Ups.. Algo salió mal. Intentalo nuevamente.', 'error')
             return redirect(url_for('pedidos.ver_pedidos'))
+
+# Marcar pedido como entregado
+@pedidos_bp.route('/entregado/<string:id>', methods=['POST'])
+@login_required
+def cambiar_estado(id):
+    pedido = Pedido.objects.get(id=id)
+    
+    if pedido.usuario != current_user:
+        return redirect(url_for('general.error_404'))
+
+    if pedido.entregado:
+        pedido.entregado = False
+        pedido.save()
+    else:
+        pedido.entregado = True
+        pedido.save()
+    return redirect(url_for('pedidos.ver_pedidos'))

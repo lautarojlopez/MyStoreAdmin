@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
+
+from pedidos.models import Pedido
 from .forms import FormAgregarCliente
 from .models import Cliente
 
@@ -48,7 +50,7 @@ def eliminar_cliente(id):
 
     cliente = Cliente.objects.get(id=id)
     if cliente.usuario.id != current_user.id:
-        return render_template('401.html')
+        return redirect(url_for('general.error_401'))
 
     if request.method == "GET":
         return render_template('eliminar-cliente.html', cliente=cliente)
@@ -94,3 +96,8 @@ def editar_cliente(id):
                 flash(error[0], 'error')
             return redirect(url_for('clientes.editar_cliente', id=cliente.id))
 
+@clientes_bp.route('/ver-pedidos/<string:id>')
+@login_required
+def ver_pedidos(id):
+    pedidos = Pedido.objects(cliente=id)
+    return render_template('pedidos.html', pedidos=pedidos)

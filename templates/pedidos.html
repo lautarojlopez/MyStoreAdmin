@@ -50,8 +50,19 @@
                 </div>
             </div>
 
-            <button class="no-entregado mt-2 text-white p-2 rounded-lg bg-green-500 hover:bg-green-600 transition-all duration-100" id="estadoPedido"><i class="fas fa-check"></i> Marcar como entregado</button>
-            <a href="{{ url_for('pedidos.eliminar_pedido', id=pedido.id) }}"><button class="no-entregado mt-2 text-white p-2 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-100"><i class="fas fa-trash"></i> Eliminar</button></a>
+            <div class="flex">
+                {% if pedido.entregado %}
+                    <form action="{{ url_for('pedidos.cambiar_estado', id=pedido.id) }}" method="POST">
+                        <button type="submit" class="no-entregado mt-2 text-white p-2 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-100" id="estadoPedido"><i class="fas fa-times-circle"></i> Marcar como no entregado</button>
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('pedidos.cambiar_estado', id=pedido.id) }}" method="POST">
+                        <button type="submit" class="no-entregado mt-2 text-white p-2 rounded-lg bg-green-500 hover:bg-green-600 transition-all duration-100" id="estadoPedido"><i class="fas fa-check-circle"></i> Marcar como entregado</button>
+                    </form>
+                {% endif %}
+                
+                <a class="ml-2" href="{{ url_for('pedidos.eliminar_pedido', id=pedido.id) }}"><button class="no-entregado mt-2 text-white p-2 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-100"><i class="fas fa-trash"></i> Eliminar</button></a>
+            </div>
 
         </div>
     {% endfor %}
