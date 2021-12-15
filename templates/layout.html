@@ -6,15 +6,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static',filename='css/main.css') }}">
-    <title>MyStore Admin - Inicio</title>
+    <title>MyStore Admin</title>
 </head>
 
 
 <body>
 
     <header class="p-5 flex justify-between w-full bg-green-700 flex justify-center items-center">
-        <h1 class="text-4xl"><span class="text-white">MyStore</span> <span
-                class="text-yellow-500 text-bold">Admin</span></h1>
+        <a href="{{ url_for('general.index') }}">
+            <h1 class="text-4xl"><span class="text-white">MyStore</span> <span
+                    class="text-yellow-500 text-bold">Admin</span></h1>
+        </a>
         <a href="{{ url_for('usuarios.cerrar_sesion') }}" class="text-center text-white hover:text-green-200 transition-all ease-in-out duration-100 text-lg">Cerrar Sesión</a>
         <!-- <i class="fas fa-chevron-circle-down cursor-pointer text-3xl text-white"></i> -->
     </header>
