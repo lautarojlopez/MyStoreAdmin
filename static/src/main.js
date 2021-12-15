@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function(){
 
     if(window.location.pathname.includes('/pedidos/agregar')){
+
+        console.log(document.querySelector('#agregarProducto'));
+
         // Agrega un nuevo campo para productos
         document.querySelector('#agregarProducto').addEventListener('click', function() {
             let nuevoProducto = document.querySelector('.nuevoProducto').cloneNode(true)
@@ -17,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function(){
         })
     }
 
-    if(window.location.pathname == '/pedidos/'){
+    if(window.location.pathname == "/pedidos/"){
         // Formatear fecha
         function formatear_fecha(fecha) {
             año = fecha[0]

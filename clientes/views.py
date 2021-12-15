@@ -96,7 +96,7 @@ def editar_cliente(id):
                 flash(error[0], 'error')
             return redirect(url_for('clientes.editar_cliente', id=cliente.id))
 
-@clientes_bp.route('/ver-pedidos/<string:id>')
+@clientes_bp.route('/ver-pedidos/<string:id>/')
 @login_required
 def ver_pedidos(id):
     pedidos = Pedido.objects(cliente=id)

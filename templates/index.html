@@ -1,9 +1,121 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2 class="text-center p-5 text-white text-3xl bg-green-500">Inicio</h2>
-<div class="p-8 h-screen">
-    <h3 class="text-center p-5 text-white text-xl bg-green-500">Ultimos Productos Agregados</h3>
-    <h3 class="text-center p-5 mt-2 text-white text-xl bg-green-500">Ultimos Clientes Agregados</h3>
-    <h3 class="text-center p-5 mt-2 text-white text-xl bg-green-500">Ultimos Pedidos Realizados</h3>
+<div class="p-4 md:p-8">
+    <h3 class="text-center p-5 my-3 text-white text-xl bg-green-500">Ultimos Pedidos Realizados</h3>
+
+    {% if pedidos|length > 0 %}
+    {% for pedido in pedidos %}
+        <div class="mt-3 p-4 w-full border border-green-600 rounded-lg shadow-lg">
+            <div>
+                <div class="flex flex-col">
+                    <p class="text-green-500 font-bold">Cliente</p>
+                    <p>{{ pedido.cliente.nombre }} - ({{ pedido.cliente.email }})</p>
+                    <p class="text-green-500 font-bold">Fecha</p>
+                    <p id="fecha">{{ pedido.created_at }}</p>
+                    <div class="grid grid-cols-2 w-8/12">
+                        <div>
+                            <p class="text-green-500 font-bold">Productos</p>
+                            {% for producto in pedido.productos %}
+                                {% if producto.nombre %}
+                                  <p>{{ producto.nombre }} ({{ producto.codigo }})</p>
+                                {% else %}
+                                  <p class="italic text-gray-400">Producto eliminado</p>
+                                {% endif %} 
+                            {% endfor %}
+                        </div>
+                        <div>
+                            <p class="text-green-500 font-bold">Cantidad</p>
+                            {% for cantidad in pedido.cantidades %}
+                                <p>{{ cantidad }}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row">
+                {% if pedido.entregado %}
+                    <form action="{{ url_for('pedidos.cambiar_estado', id=pedido.id) }}" method="POST">
+                        <button type="submit" class="w-full no-entregado mt-2 text-white p-2 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-100" id="estadoPedido"><i class="fas fa-times-circle"></i> Marcar como no entregado</button>
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('pedidos.cambiar_estado', id=pedido.id) }}" method="POST">
+                        <button type="submit" class="w-full no-entregado mt-2 text-white p-2 rounded-lg bg-green-500 hover:bg-green-600 transition-all duration-100" id="estadoPedido"><i class="fas fa-check-circle"></i> Marcar como entregado</button>
+                    </form>
+                {% endif %}
+                
+                <a class="block md:ml-2" href="{{ url_for('pedidos.eliminar_pedido', id=pedido.id) }}"><button class="w-full no-entregado mt-2 text-white p-2 rounded-lg bg-red-500 hover:bg-red-600 transition-all duration-100"><i class="fas fa-trash"></i> Eliminar</button></a>
+            </div>
+
+        </div>
+    {% endfor %}
+{% else %}
+    <p class="text-center text-xl">Aún no has añadido pedidos.</p>
+{% endif %}
+
+    <h3 class="text-center p-5 my-3 text-white text-xl bg-green-500">Ultimos Productos Agregados</h3>
+
+    {% if productos|length > 0 %}
+    <div class="">
+
+        <div class="grid lg:grid-cols-3 sm:grid-cols-2 md:grid-cols-2 gap-4">
+        {% for producto in productos %}
+                <div class="block p-4 border shadow-xl transition-all duration-200 ease-in-out rounded-lg border-green-600">
+                    <img src="/static/uploads/{{ producto.imagen }}" alt="Imagen Producto" class="p-3 w-52 h-52 block m-auto">
+                    <ul class="text-center">
+                        <li><span class="text-green-800">Nombre: </span>{{ producto.nombre }}</li>
+                        <li><span class="text-green-800">Código: </span>{{ producto.codigo }}</li>
+                        <li><span class="text-green-800">Stock: </span>{{ producto.stock }}</li>
+                        <li><span class="text-green-800">Precio:</span> ${{ producto.precio }}</li>
+                    </ul>
+                    <div class="flex flex-col md:flex-row justify-around w-full mt-3">
+                        <a href="{{ url_for('general.editar_producto', id=producto.id) }}"><p class="w-full mb-2 md:mb-0 text-center p-2 text-white bg-yellow-500 hover:bg-yellow-600 transition-all duration-100 rounded-lg mr-3"><i class="fas fa-pen"></i> Editar</p></a>
+                        <a href="{{ url_for('general.eliminar_producto', id=producto.id) }}"><p class="w-full mb-2 md:mb-0 text-center p-2 text-white bg-red-500 hover:bg-red-600 transition-all duration-100 rounded-lg mr-3"><i class="fas fa-trash"></i> Eliminar</p></a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+        <p class="text-center text-xl">Aún no has añadido productos.</p>
+    {% endif %}
+
+    <h3 class="text-center p-5 my-3 text-white text-xl bg-green-500">Ultimos Clientes Agregados</h3>
+
+    {% if clientes|length > 0 %}
+
+    {% for cliente in clientes %}
+        <div class="mt-3 p-4 w-full border border-green-600 rounded-lg shadow-lg">
+            <div class="flex flex-col md:grid md:grid-cols-4">
+                <div>
+                    <p class="text-green-500 font-bold">Nombre</p>
+                    <p>{{ cliente.nombre }}</p>
+                </div>
+                <div>
+                    <p class="text-green-500 font-bold">E-mail</p>
+                    <p class="">{{ cliente.email }}</p>
+                </div>
+                <div>
+                    <p class="text-green-500 font-bold">Dirección</p>
+                    <p>{{ cliente.direccion }}</p>
+                </div>
+                <div>
+                    <p class="text-green-500 font-bold">Teléfono</p>
+                    <p>{{ cliente.telefono }}</p>
+                </div>
+            </div>
+            <div class="mt-4 text-center md:text-left">
+                <a href="{{ url_for('clientes.ver_pedidos', id=cliente.id) }}" class="block md:inline mb-2 p-2 bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-100 rounded-lg p-2 text-white"><i class="fas fa-clipboard-list"></i> Ver Pedidos</a>
+                <a href="{{ url_for('clientes.editar_cliente', id=cliente.id) }}" class="block md:inline mb-2 p-2 bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-100 rounded-lg text-white"><i class="fas fa-pen"></i> Editar</a>
+                <a href="{{ url_for('clientes.eliminar_cliente', id=cliente.id) }}" class="block md:inline p-2 bg-red-500 hover:bg-red-600 transition-all ease-in-out duration-100 rounded-lg text-white"><i class="fas fa-trash"></i> Eliminar</a>
+            </div>
+        </div>
+    {% endfor %}
+
+    {% else %}
+        <p class="text-center text-xl">Aún no has añadido clientes.</p>
+    {% endif %}
+
 </div>
 {% endblock content %}

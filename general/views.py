@@ -2,7 +2,12 @@ from flask import Blueprint, redirect, render_template, request, url_for, flash
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from shortuuid import uuid
+
+from clientes.views import clientes
+from usuarios.models import Usuario
 from .models import Producto
+from pedidos.models import Pedido
+from clientes.models import Cliente
 import os
 
 from general.forms import FormAgregarProducto
@@ -13,7 +18,26 @@ general = Blueprint('general', __name__)
 @general.route('/')
 @login_required
 def index():
-    return render_template('index.html')
+    pedidos = Pedido.objects(usuario=current_user)[:6]
+    productos = Producto.objects(usuario=current_user)[:5]
+    clientes =  Cliente.objects(usuario=current_user)[:5]
+    return render_template('index.html', pedidos=pedidos, productos=productos, clientes=clientes)
+
+@general.route('/buscar')
+@login_required
+def buscar():
+    print(request.args)
+    # Buscar producto
+    if request.args.get('producto'):
+        busqueda = request.args.get('producto')
+        productos = Producto.objects(nombre__icontains=busqueda, usuario=current_user)
+        return render_template('buscar.html', productos=productos, busqueda=busqueda)
+    # Buscar cliente
+    if request.args.get('cliente'):
+        busqueda = request.args.get('cliente')
+        clientes = Cliente.objects(nombre__icontains=busqueda, usuario=current_user)
+        return render_template('buscar.html', clientes=clientes, busqueda=busqueda)
+    return render_template('buscar.html')
 
 # Ver todos los productos
 @general.route('/productos/')

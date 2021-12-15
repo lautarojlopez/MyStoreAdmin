@@ -115,3 +115,15 @@ def cambiar_estado(id):
         pedido.entregado = True
         pedido.save()
     return redirect(url_for('pedidos.ver_pedidos'))
+
+@pedidos_bp.route('/entregados')
+@login_required
+def ver_entregados():
+    pedidos = Pedido.objects(usuario=current_user, entregado=True)
+    return render_template('pedidos.html', pedidos=pedidos)
+
+@pedidos_bp.route('/no-entregados')
+@login_required
+def ver_noentregados():
+    pedidos = Pedido.objects(usuario=current_user, entregado=False)
+    return render_template('pedidos.html', pedidos=pedidos)

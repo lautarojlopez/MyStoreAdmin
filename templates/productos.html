@@ -20,6 +20,16 @@
 
     {% if productos|length > 0 %}
     <div class="p-4 md:p-8 h-full">
+
+        <form action="{{ url_for('general.buscar') }}" method="GET">
+            <div class="flex justify-center">
+                <div class="text-gray-300 relative flex items-center mb-7 w-full md:w-3/6">
+                    <i class="absolute left-5 fas fa-search"></i>
+                    <input type="text" name="producto" class="ml-3 border border-gray-200 rounded-full w-full px-7 py-1 text-lg text-gray-600 focus:outline-none" placeholder="Buscar Producto...">
+                </div>
+            </div>
+        </form>
+
         <div class="grid lg:grid-cols-3 sm:grid-cols-2 md:grid-cols-2 gap-4">
         {% for producto in productos %}
                 <div class="block p-4 border-2 shadow-xl transition-all duration-200 ease-in-out rounded-lg border-green-500">
@@ -30,7 +40,7 @@
                         <li><span class="text-green-800">Stock: </span>{{ producto.stock }}</li>
                         <li><span class="text-green-800">Precio:</span> ${{ producto.precio }}</li>
                     </ul>
-                    <div class="flex flex-col md:flex-row justify-center w-full mt-3">
+                    <div class="flex flex-col md:flex-row justify-around w-full mt-3">
                         <a href="{{ url_for('general.editar_producto', id=producto.id) }}"><p class="w-full mb-2 md:mb-0 text-center p-2 text-white bg-yellow-500 hover:bg-yellow-600 transition-all duration-100 rounded-lg mr-3"><i class="fas fa-pen"></i> Editar</p></a>
                         <a href="{{ url_for('general.eliminar_producto', id=producto.id) }}"><p class="w-full mb-2 md:mb-0 text-center p-2 text-white bg-red-500 hover:bg-red-600 transition-all duration-100 rounded-lg mr-3"><i class="fas fa-trash"></i> Eliminar</p></a>
                     </div>

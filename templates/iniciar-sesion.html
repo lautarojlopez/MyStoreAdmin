@@ -15,10 +15,10 @@
                 <ul class='text-center'>
                     {% for categoria, message in messages %}
                         {% if categoria == 'error' %}
-                        <li class="p-3 mb-2 rounded-lg border-4 border-red-500 text-red-700 bg-red-200">{{ message }}</li>
+                        <li class="p-3 mb-2 rounded-lg border-2 border-red-500 text-red-700 bg-red-200">{{ message }}</li>
                         {% endif %}
                         {% if categoria == 'success' %}
-                        <li class="p-3 mb-2 rounded-lg border-4 border-green-500 text-green-700 bg-green-200">{{ message }}</li>
+                        <li class="p-3 mb-2 rounded-lg border-2 border-green-500 text-green-700 bg-green-200">{{ message }}</li>
                         {% endif %}
                     {% endfor %}
                 </ul>

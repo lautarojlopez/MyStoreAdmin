@@ -20,6 +20,16 @@
 {% endwith %}
 
 <div class="p-4 md:p-8">
+
+    <form action="{{ url_for('general.buscar') }}">
+        <div class="flex justify-center">
+            <div class="text-gray-300 relative flex items-center mb-5 w-full md:w-3/6">
+                <i class="absolute left-5 fas fa-search"></i>
+                <input type="text" name="cliente" class="ml-3 border border-gray-200 rounded-full w-full px-7 py-1 text-lg text-gray-600 focus:outline-none" placeholder="Buscar Cliente...">
+            </div>
+        </div>
+    </form>
+
 {% if clientes|length > 0 %}
 
     {% for cliente in clientes %}
