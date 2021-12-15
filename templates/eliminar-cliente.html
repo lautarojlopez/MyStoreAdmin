@@ -1,34 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2 class="text-center p-5 text-white text-3xl bg-green-500">Clientes</h2>
-<div class="p-8 h-full">
-    <div class="w-10/12 shadow-lg border border-green-300 rounded-lg m-auto">
+<div class="p-4 md:p-8 h-full">
+    <div class="w-12/12 md:w-8/12 shadow-lg border border-green-300 rounded-lg m-auto">
         <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Eliminar Cliente</h3>
         <p class="text-xl p-3 text-center">¿Estás seguro de que deseas eliminar este cliente?</p>
-
-        <div class="p-3">
-            <div class="p-4 h-full w-full border border-green-600 rounded-lg shadow-lg">
-                <div class="grid grid-cols-4">
-                    <div>
-                        <p class="text-green-500 font-bold">Nombre</p>
-                        <p>{{ cliente.nombre }}</p>
-                    </div>
-                    <div>
-                        <p class="text-green-500 font-bold">E-mail</p>
-                        <p class="">{{ cliente.email }}</p>
-                    </div>
-                    <div>
-                        <p class="text-green-500 font-bold">Dirección</p>
-                        <p>{{ cliente.direccion }}</p>
-                    </div>
-                    <div>
-                        <p class="text-green-500 font-bold">Teléfono</p>
-                        <p>{{ cliente.telefono }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="flex justify-center mb-3">
             <a href="{{ url_for('clientes.clientes') }}" class="p-3 m-3 bg-red-500 rounded shadow-lg text-white hover:bg-red-600 transition-all ease-in-out duration-200">Cancelar</a>
             <form action="{{ url_for('clientes.eliminar_cliente', id=cliente.id) }}" method="POST">

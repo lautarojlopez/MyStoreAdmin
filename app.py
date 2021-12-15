@@ -1,8 +1,6 @@
-from flask import Flask, render_template
-from flask.helpers import url_for
+from flask import Flask
 from flask_mongoengine import MongoEngine
-from flask_wtf.csrf import CSRFProtect
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 from usuarios.models import Usuario
 import os
 

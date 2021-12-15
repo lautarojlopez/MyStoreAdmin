@@ -12,10 +12,10 @@
 
 <body>
 
-    <header class="pl-5 pr-5 flex justify-between w-full h-20 bg-green-700 flex justify-center items-center">
+    <header class="p-5 flex justify-between w-full bg-green-700 flex justify-center items-center">
         <h1 class="text-4xl"><span class="text-white">MyStore</span> <span
                 class="text-yellow-500 text-bold">Admin</span></h1>
-        <a href="{{ url_for('usuarios.cerrar_sesion') }}" class="text-white hover:text-green-100 transition-all ease-in-out duration-100 text-lg">Cerrar Sesión</a>
+        <a href="{{ url_for('usuarios.cerrar_sesion') }}" class="text-center text-white hover:text-green-200 transition-all ease-in-out duration-100 text-lg">Cerrar Sesión</a>
         <!-- <i class="fas fa-chevron-circle-down cursor-pointer text-3xl text-white"></i> -->
     </header>
 
@@ -68,7 +68,7 @@
             </ul>
         </aside>
 
-        <main class="w-full h-full">
+        <main class="w-full h-screen md:h-full">
 
         {% block content %}
         {% endblock content %}

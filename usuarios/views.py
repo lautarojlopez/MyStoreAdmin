@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login.utils import login_required, login_user, logout_user, current_user
 from .models import Usuario
-from .forms import FormLogin, FormRegistro
+from .forms import FormForgotPassword, FormLogin, FormRegistro, FormRestaurarPassword
 import bcrypt
+import smtplib
+import os
 
 usuarios = Blueprint('usuarios', __name__)
 
@@ -67,3 +69,15 @@ def iniciar_sesion():
 def cerrar_sesion():
     logout_user()
     return redirect(url_for('usuarios.iniciar_sesion'))
+
+# Reset Password
+from usuarios.forms import *
+@usuarios.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == "GET":
+        form = FormForgotPassword()
+        return render_template('forgot-password.html', form=form)
+    if request.method == "POST":
+        form_reset = FormForgotPassword(request.form)
+        if form_reset.validate():
+            return redirect(url_for('usuarios.forgot_password'))

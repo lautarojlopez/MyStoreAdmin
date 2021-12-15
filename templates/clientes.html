@@ -19,7 +19,7 @@
 {% endif %}
 {% endwith %}
 
-<div class="p-8">
+<div class="p-4 md:p-8">
 {% if clientes|length > 0 %}
 
     {% for cliente in clientes %}
@@ -42,10 +42,10 @@
                     <p>{{ cliente.telefono }}</p>
                 </div>
             </div>
-            <div class="mt-2">
-                <a href="{{ url_for('clientes.ver_pedidos', id=cliente.id) }}" class="p-2 bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-100 rounded-lg p-2 text-white"><i class="fas fa-clipboard-list"></i> Ver Pedidos</a>
-                <a href="{{ url_for('clientes.editar_cliente', id=cliente.id) }}" class="p-2 bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-100 rounded-lg text-white"><i class="fas fa-pen"></i> Editar</a>
-                <a href="{{ url_for('clientes.eliminar_cliente', id=cliente.id) }}" class="p-2 bg-red-500 hover:bg-red-600 transition-all ease-in-out duration-100 rounded-lg text-white"><i class="fas fa-trash"></i> Eliminar</a>
+            <div class="mt-4 text-center md:text-left">
+                <a href="{{ url_for('clientes.ver_pedidos', id=cliente.id) }}" class="block md:inline mb-2 p-2 bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-100 rounded-lg p-2 text-white"><i class="fas fa-clipboard-list"></i> Ver Pedidos</a>
+                <a href="{{ url_for('clientes.editar_cliente', id=cliente.id) }}" class="block md:inline mb-2 p-2 bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-100 rounded-lg text-white"><i class="fas fa-pen"></i> Editar</a>
+                <a href="{{ url_for('clientes.eliminar_cliente', id=cliente.id) }}" class="block md:inline p-2 bg-red-500 hover:bg-red-600 transition-all ease-in-out duration-100 rounded-lg text-white"><i class="fas fa-trash"></i> Eliminar</a>
             </div>
         </div>
     {% endfor %}

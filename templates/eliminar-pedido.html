@@ -1,42 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
 <h2 class="text-center p-5 text-white text-3xl bg-green-500">Pedidos</h2>
-<div class="p-8 h-full">
-    <div class="w-10/12 shadow-lg border border-green-300 rounded-lg m-auto">
+<div class="p-4 md:p-8 h-full">
+    <div class="w-12/12 md:w-8/12 shadow-lg border border-green-300 rounded-lg m-auto">
         <h3 class="text-center text-white bg-green-500 text-xl rounded-tl-lg rounded-tr-lg p-3">Eliminar Pedido</h3>
         <p class="text-xl p-3 text-center">¿Estás seguro de que deseas eliminar este pedido?</p>
         <p class="text-md text-center"><span class="text-red-600">ATENCIÓN:</span> Si el pedido no fue entregado, los productos se devolverán al stock.</p>
-        <div class="p-3">
-            <div class="p-4 h-full w-full border border-green-600 rounded-lg shadow-lg">
-                <div>
-                    <div class="flex flex-col">
-                        <p class="text-green-500 font-bold">Cliente</p>
-                        <p>{{ pedido.cliente.nombre }} - ({{ pedido.cliente.email }})</p>
-                        <p class="text-green-500 font-bold">Fecha</p>
-                        <p id="fecha">{{ pedido.created_at }}</p>
-                        <div class="grid grid-cols-2 w-8/12">
-                            <div>
-                                <p class="text-green-500 font-bold">Productos</p>
-                                {% for producto in pedido.productos %}
-                                    {% if producto.nombre %}
-                                      <p>{{ producto.nombre }} ({{ producto.codigo }})</p>
-                                    {% else %}
-                                      <p class="italic text-gray-400">Producto eliminado</p>
-                                    {% endif %} 
-                                {% endfor %}
-                            </div>
-                            <div>
-                                <p class="text-green-500 font-bold">Cantidad</p>
-                                {% for cantidad in pedido.cantidades %}
-                                    <p>{{ cantidad }}</p>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="flex justify-center mb-3">
             <a href="{{ url_for('pedidos.ver_pedidos') }}" class="p-3 m-3 bg-red-500 rounded shadow-lg text-white hover:bg-red-600 transition-all ease-in-out duration-200">Cancelar</a>
             <form action="{{ url_for('pedidos.eliminar_pedido', id=pedido.id) }}" method="POST">
